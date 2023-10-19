@@ -27,6 +27,7 @@ const TaskList: React.FC = () => {
         name: newTaskName,
         category: DEFAULT_STATUS,
         created: currentDate,
+        operation: "add",
       }),
     })
       .then((response) => response.json())
@@ -50,6 +51,7 @@ const TaskList: React.FC = () => {
           name: newName,
           category: currentCategory,
           created: currentDate,
+          operation: "update",
         }),
       })
         .then((response) => response.json())
@@ -70,7 +72,11 @@ const TaskList: React.FC = () => {
     fetch(`${API_URL}/${taskId}`, {
       method: "PUT",
       headers: HEADER_TYPE,
-      body: JSON.stringify({ name: currentName, category: newCategory, created: currentDate }),
+      body: JSON.stringify({
+        name: currentName,
+        category: newCategory,
+        created: currentDate,
+      }),
     })
       .then((response) => {
         if (response.ok) {
@@ -98,6 +104,10 @@ const TaskList: React.FC = () => {
   const handleDelete = (id: string) => {
     fetch(`${API_URL}/${id}`, {
       method: "DELETE",
+      headers: HEADER_TYPE,
+      body: JSON.stringify({
+        operation: "delete", // Añade el campo de operación aquí
+      }),
     }).then(() =>
       setTasks((oldTasks) => oldTasks.filter((task) => task.idString !== id))
     );
